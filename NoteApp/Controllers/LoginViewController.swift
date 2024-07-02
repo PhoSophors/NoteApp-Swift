@@ -19,7 +19,7 @@ class LoginViewController: UIViewController {
     let noteIconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "note.text")
-        imageView.tintColor = .white
+        imageView.tintColor = ColorManager.shared.backgroundColor()
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -117,7 +117,7 @@ class LoginViewController: UIViewController {
 
     let formBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = ColorManager.shared.backgroundColor()
         view.layer.cornerRadius = 30
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = 0.1

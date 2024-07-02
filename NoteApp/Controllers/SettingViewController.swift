@@ -9,7 +9,7 @@ class SettingViewController: UIViewController {
     private let personIconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.circle")
-        imageView.tintColor = .darkGray
+        imageView.tintColor = ColorManager.shared.nightRiderColor()
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -22,22 +22,44 @@ class SettingViewController: UIViewController {
     
     private lazy var logoutButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Logout", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .red
-        button.layer.cornerRadius = 5
+        button.backgroundColor = ColorManager.shared.nightRiderColor()
+        button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.boldSystemFont(ofSize: button.titleLabel?.font.pointSize ?? 17) // Use current size or default
+        ]
+        let attributedTitle = NSAttributedString(string: "Sign Out", attributes: attributes)
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        
+        
         return button
+    }()
+    
+    let formBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = ColorManager.shared.backgroundColor()
+        view.layer.cornerRadius = 30
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.1
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = 5
+        return view
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Settings"
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = ColorManager.shared.backgroundColor()
         
-        view.addSubview(personIconImageView)
-        view.addSubview(usernameLabel)
-        view.addSubview(logoutButton)
+        // Add formBackgroundView to the main view
+        view.addSubview(formBackgroundView)
+        
+        // Add subviews to formBackgroundView
+        formBackgroundView.addSubview(personIconImageView)
+        formBackgroundView.addSubview(usernameLabel)
+        formBackgroundView.addSubview(logoutButton)
         
         setupUI()
         
@@ -49,24 +71,34 @@ class SettingViewController: UIViewController {
     
     // Function to setup UI elements and their constraints
     private func setupUI() {
-        // Setup constraints using SnapKit
-        personIconImageView.snp.makeConstraints { make in
+        // Setup constraints for formBackgroundView using SnapKit
+        formBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalTo(logoutButton.snp.bottom).offset(20)
+        }
+        
+        // Setup constraints for personIconImageView
+        personIconImageView.snp.makeConstraints { make in
+            make.top.equalTo(formBackgroundView).offset(20)
             make.centerX.equalToSuperview()
             make.width.height.equalTo(100)
         }
         
+        // Setup constraints for usernameLabel
         usernameLabel.snp.makeConstraints { make in
             make.top.equalTo(personIconImageView.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
-            make.leading.greaterThanOrEqualTo(view).offset(20)
-            make.trailing.lessThanOrEqualTo(view).offset(-20)
+            make.leading.greaterThanOrEqualTo(formBackgroundView).offset(20)
+            make.trailing.lessThanOrEqualTo(formBackgroundView).offset(-20)
         }
         
+        // Setup constraints for logoutButton
         logoutButton.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-            make.leading.trailing.equalTo(view).inset(20)
+            make.top.equalTo(usernameLabel.snp.bottom).offset(20)
+            make.leading.trailing.equalTo(formBackgroundView).inset(20)
             make.height.equalTo(40)
+            make.bottom.equalTo(formBackgroundView).offset(-20)
         }
     }
     
@@ -78,7 +110,7 @@ class SettingViewController: UIViewController {
         let confirmAction = UIAlertAction(title: "Logout", style: .destructive) { _ in
             // Clear login state and Core Data
             LoginHelper.clearLoginState()
-            DataManager.shared.clearCoreData()
+//            DataManager.shared.clearCoreData()
             
             // Dismiss current view controller
             self.dismiss(animated: true, completion: nil)
@@ -103,10 +135,14 @@ class SettingViewController: UIViewController {
         LoginHelper.checkLoginStatus { isLoggedIn, username in
             if isLoggedIn, let username = username {
                 DispatchQueue.main.async {
-                    self.usernameLabel.text = "Logged in as: \(username)"
+                    let attributedText = NSAttributedString(string: username, attributes: [
+                        .font: UIFont.boldSystemFont(ofSize: 24),
+                        .foregroundColor: UIColor.black // Adjust color as needed
+                    ])
+                    self.usernameLabel.attributedText = attributedText
                 }
             }
         }
     }
-}
 
+}

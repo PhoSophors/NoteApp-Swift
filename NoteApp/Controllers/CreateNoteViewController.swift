@@ -5,47 +5,56 @@ protocol CreateNoteViewControllerDelegate: AnyObject {
     func didCreateNote()
 }
 
-class CreateNoteViewController: UIViewController {
-    
+class CreateNoteViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
+
     var selectedFolder: Folder?
     private let dataManager = DataManager.shared
     weak var delegate: CreateNoteViewControllerDelegate?
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Note Title:"
-        return label
-    }()
-    
     private let titleTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter title"
-        textField.borderStyle = .roundedRect
+        textField.tintColor = ColorManager.shared.nightRiderColor()
+        textField.textColor = ColorManager.shared.nightRiderColor()
+        textField.font = UIFont.boldSystemFont(ofSize: 24)
+        textField.layer.cornerRadius = 0
+        textField.layer.borderWidth = 0
+        textField.layer.borderColor = UIColor.darkGray.cgColor
+
+        // Set placeholder text with bold and size 24 attributes
+        textField.attributedPlaceholder = NSAttributedString(
+            string: "Enter title",
+            attributes: [
+                NSAttributedString.Key.foregroundColor: ColorManager.shared.nightRiderColor(),
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24)
+            ]
+        )
+        
+        let padding: CGFloat = 15
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: padding, height: textField.frame.height)) // Optional: Add left padding
+        textField.leftViewMode = .always
+
         return textField
     }()
-    
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Note Description:"
-        return label
-    }()
-    
+
     private let descriptionTextView: UITextView = {
         let textView = UITextView()
         textView.text = "Enter description"
-        textView.layer.cornerRadius = 8
         textView.font = UIFont.systemFont(ofSize: 16)
-        textView.layer.backgroundColor = UIColor.systemGray6.cgColor
+        textView.backgroundColor = ColorManager.shared.backgroundColor()
+        textView.tintColor = ColorManager.shared.nightRiderColor()
+        textView.textColor = ColorManager.shared.nightRiderColor()
+        textView.layer.masksToBounds = true
+        textView.textAlignment = .left
+        
+        let padding: CGFloat = 10
+        textView.textContainerInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+        
         return textView
     }()
     
-    private let saveButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Save", for: .normal)
-        button.backgroundColor = .systemBlue
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 5
-        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+    private lazy var saveButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTapped))
         return button
     }()
     
@@ -54,46 +63,39 @@ class CreateNoteViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = ColorManager.shared.backgroundColor()
         title = "Create Note"
         
         setupUI()
+        
+        // Assign UITextViewDelegate to descriptionTextView
+        descriptionTextView.delegate = self
+        titleTextField.delegate = self
+        
+        navigationItem.rightBarButtonItem = saveButton
+        
+        // Setup keyboard observers
+        setupKeyboardObservers()
+        
+        // Add tap gesture to dismiss keyboard
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
     
     private func setupUI() {
-        view.addSubview(titleLabel)
         view.addSubview(titleTextField)
-        view.addSubview(descriptionLabel)
         view.addSubview(descriptionTextView)
-        view.addSubview(saveButton)
-        
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.leading.equalToSuperview().offset(20)
-        }
         
         titleTextField.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.leading.trailing.equalToSuperview().inset(0)
             make.height.equalTo(40)
-        }
-        
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleTextField.snp.bottom).offset(20)
-            make.leading.equalToSuperview().offset(20)
         }
         
         descriptionTextView.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(120)
-        }
-        
-        saveButton.snp.makeConstraints { make in
-            make.top.equalTo(descriptionTextView.snp.bottom).offset(20)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(100)
-            make.height.equalTo(40)
+            make.top.equalTo(titleTextField.snp.bottom).offset(0)
+            make.leading.trailing.equalToSuperview().inset(00)
+            make.bottom.equalTo(view.snp.bottom)
         }
     }
     
@@ -105,20 +107,82 @@ class CreateNoteViewController: UIViewController {
             return
         }
         
-        // Ensure the selectedFolder is fetched using the same context
-        if let folderInCurrentContext = dataManager.fetchFolderByName(name: folder.folderName ?? "") {
-            dataManager.saveNote(title: title, description: description, folder: folderInCurrentContext)
-            showSuccessMessage()
-        } else {
-            showErrorMessage("Failed to find the folder.")
+        // Save the note using DataManager
+        dataManager.saveNote(title: title, description: description, folder: folder)
+        
+        // Notify delegate or callback that a note has been created
+        noteCreatedCallback?()
+        
+        // Show success message and dismiss
+        showSuccessMessage()
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    // MARK: - Keyboard Handling
+    
+    private func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
         }
+        
+        let keyboardHeight = keyboardFrame.height
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        descriptionTextView.contentInset = contentInsets
+        
+        // Adjust the scroll view's content offset if needed
+        var visibleRect = view.frame
+        visibleRect.size.height -= keyboardHeight
+        
+        if descriptionTextView.isFirstResponder {
+            let activeFieldRect = CGRect(origin: CGPoint(x: 0, y: descriptionTextView.frame.origin.y),
+                                         size: CGSize(width: descriptionTextView.frame.size.width,
+                                                      height: descriptionTextView.frame.size.height))
+            
+            if !visibleRect.contains(activeFieldRect.origin) {
+                descriptionTextView.scrollRectToVisible(activeFieldRect, animated: true)
+            }
+        }
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        descriptionTextView.contentInset = .zero
+    }
+    
+    // MARK: - UITextViewDelegate Methods
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Enter description" {
+            textView.text = ""
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Enter description"
+        }
+    }
+    
+    // MARK: - UITextFieldDelegate Methods
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderColor = UIColor.systemBlue.cgColor
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderColor = UIColor.systemGray4.cgColor
     }
     
     private func showSuccessMessage() {
         let alertController = UIAlertController(title: "Success", message: "Note created successfully.", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
-            // Notify the delegate that a note has been created
-            self?.noteCreatedCallback?()
             // Dismiss this view controller
             self?.navigationController?.popViewController(animated: true)
         }))
@@ -130,4 +194,11 @@ class CreateNoteViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alertController, animated: true, completion: nil)
     }
+    
+    // MARK: - Memory Management
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
 }

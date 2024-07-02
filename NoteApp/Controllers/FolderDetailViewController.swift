@@ -17,7 +17,7 @@ class FolderDetailViewController: UIViewController {
         layout.minimumInteritemSpacing = 10
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(NoteCollectionViewCell.self, forCellWithReuseIdentifier: NoteCollectionViewCell.identifier)
@@ -36,7 +36,7 @@ class FolderDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = ColorManager.shared.backgroundColor()
         setupSearchBar()
         setupCollectionView()
         fetchNotes()
@@ -51,7 +51,7 @@ class FolderDetailViewController: UIViewController {
         
         let plusButton = UIButton(type: .system)
         plusButton.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
-        plusButton.tintColor = .systemBlue
+        plusButton.tintColor = ColorManager.shared.nightRiderColor()
         plusButton.addTarget(self, action: #selector(createNote), for: .touchUpInside)
         searchContainer.addSubview(plusButton)
 
@@ -78,7 +78,7 @@ class FolderDetailViewController: UIViewController {
         view.addSubview(collectionView)
 
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom).offset(10)
+            make.top.equalTo(searchBar.snp.bottom).offset(20)
             make.leading.trailing.bottom.equalToSuperview()
         }
     }
@@ -176,6 +176,7 @@ extension FolderDetailViewController: UICollectionViewDelegateFlowLayout, UIColl
         }
     }
 
+    
     private func editNote(at indexPath: IndexPath) {
         let selectedNote = isSearching ? filteredNotes[indexPath.item] : notes[indexPath.item]
         let noteVC = NoteViewController()

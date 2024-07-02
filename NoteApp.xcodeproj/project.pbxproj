@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0EC21FB276B5FFC4FB771939 /* Pods_NoteApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9C5EC8173C90F4B24439B6 /* Pods_NoteApp.framework */; };
+		187093E12C33DA010048136D /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187093E02C33DA010048136D /* ColorManager.swift */; };
 		18A32EB72C33C15B002DE47A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A32EB62C33C15B002DE47A /* AppDelegate.swift */; };
 		18A32EB92C33C15B002DE47A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A32EB82C33C15B002DE47A /* SceneDelegate.swift */; };
 		18A32EC02C33C15C002DE47A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18A32EBF2C33C15C002DE47A /* Assets.xcassets */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		187093E02C33DA010048136D /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		18A32EB32C33C15B002DE47A /* NoteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NoteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18A32EB62C33C15B002DE47A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18A32EB82C33C15B002DE47A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			children = (
 				18A32ECC2C33C207002DE47A /* DataManager.swift */,
 				18A32ECE2C33C217002DE47A /* Helper.swift */,
+				187093E02C33DA010048136D /* ColorManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				18A32ECD2C33C207002DE47A /* DataManager.swift in Sources */,
 				18A32EE22C33C31D002DE47A /* NoteViewController.swift in Sources */,
 				18A32ED92C33C278002DE47A /* NoteListDataModel.xcdatamodeld in Sources */,
+				187093E12C33DA010048136D /* ColorManager.swift in Sources */,
 				18A32EDC2C33C2E6002DE47A /* LoginViewController.swift in Sources */,
 				18A32EE42C33C331002DE47A /* FolderDetailViewController.swift in Sources */,
 				18A32EDE2C33C2F7002DE47A /* SettingViewController.swift in Sources */,

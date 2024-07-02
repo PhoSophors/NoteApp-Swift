@@ -7,30 +7,43 @@ class FolderViewController: UIViewController {
     private var filteredFolders: [Folder] = [] // Array to hold filtered folders
     private let dataManager = DataManager()
     private let refreshControl = UIRefreshControl()
+    private var isNavigatingToFolderDetail = false
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemGray6
+        collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(FolderCollectionViewCell.self, forCellWithReuseIdentifier: "folderCell")
         collectionView.refreshControl = refreshControl
+        collectionView.contentInset = .zero // Ensure no extra padding
         return collectionView
     }()
-
+    
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Search"
         searchBar.searchBarStyle = .minimal
-        searchBar.delegate = self // Assigning delegate for search functionality
+        searchBar.delegate = self
         return searchBar
     }()
 
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "My Note"
+        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.textColor = ColorManager.shared.nightRiderColor()
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray6
-
+        view.backgroundColor = ColorManager.shared.backgroundColor()
+        setupTitleLabel()
         setupSearchBar()
         setupCollectionView()
         fetchFoldersFromCoreData()
@@ -41,6 +54,14 @@ class FolderViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
 
+    private func setupTitleLabel() {
+        view.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            make.leading.equalToSuperview().offset(10)
+        }
+    }
+
     private func setupSearchBar() {
         let searchContainer = UIView()
         view.addSubview(searchContainer)
@@ -49,12 +70,12 @@ class FolderViewController: UIViewController {
 
         let plusButton = UIButton(type: .system)
         plusButton.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
-        plusButton.tintColor = .systemBlue
+        plusButton.tintColor = ColorManager.shared.nightRiderColor()
         plusButton.addTarget(self, action: #selector(createFolder), for: .touchUpInside)
         searchContainer.addSubview(plusButton)
 
         searchContainer.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(50)
@@ -76,7 +97,7 @@ class FolderViewController: UIViewController {
         view.addSubview(collectionView)
 
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom)
+            make.top.equalTo(searchBar.snp.bottom).offset(20)
             make.leading.equalToSuperview().offset(10)
             make.trailing.equalToSuperview().offset(-10)
             make.bottom.equalToSuperview().offset(-10)
@@ -94,7 +115,7 @@ class FolderViewController: UIViewController {
 
     private func fetchFoldersFromCoreData() {
         folders = dataManager.fetchFolders()
-        filteredFolders = folders // Initialize filteredFolders with all folders initially
+        filteredFolders = folders
         collectionView.reloadData()
     }
 
@@ -185,7 +206,9 @@ extension FolderViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width - 30) / 4
+        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+        let totalSpacing = flowLayout.minimumInteritemSpacing * CGFloat(2) + flowLayout.sectionInset.left + flowLayout.sectionInset.right
+        let width = (collectionView.bounds.width - totalSpacing) / CGFloat(3)
         return CGSize(width: width, height: width * 1.2)
     }
 
@@ -274,6 +297,7 @@ extension FolderViewController: UICollectionViewDataSource, UICollectionViewDele
         view.endEditing(true)
     }
 }
+
 
 extension FolderViewController: UISearchBarDelegate {
 

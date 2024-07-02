@@ -8,6 +8,7 @@ class NoteCollectionViewCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textColor = ColorManager.shared.backgroundColor()
         label.numberOfLines = 1
         return label
     }()
@@ -15,15 +16,15 @@ class NoteCollectionViewCell: UICollectionViewCell {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .darkGray
+        label.textColor = ColorManager.shared.backgroundColor()
         label.numberOfLines = 2
         return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .white
-        contentView.layer.cornerRadius = 8
+        contentView.backgroundColor = ColorManager.shared.nightRiderColor()
+        contentView.layer.cornerRadius = 15
         contentView.layer.shadowColor = UIColor.black.cgColor
         contentView.layer.shadowOpacity = 0.1
         contentView.layer.shadowOffset = CGSize(width: 0, height: 2)

@@ -10,9 +10,9 @@ class TabBarController: UITabBarController {
 
     func setupTabBar() {
         // Set background color of the tab bar
-        tabBar.barTintColor = .darkGray
-        tabBar.tintColor = .systemBlue
-        tabBar.backgroundColor = .white
+        tabBar.barTintColor = .white
+        tabBar.tintColor = ColorManager.shared.nightRiderColor()
+        tabBar.backgroundColor = .clear
 
         // Create NoteViewController (embedded in a navigation controller)
         let noteVC = FolderViewController()
