@@ -1,0 +1,24 @@
+PODS:
+  - KeychainAccess (4.2.2)
+  - SnapKit (5.7.1)
+  - SwipeCellKit (2.7.1)
+
+DEPENDENCIES:
+  - KeychainAccess
+  - SnapKit
+  - SwipeCellKit
+
+SPEC REPOS:
+  trunk:
+    - KeychainAccess
+    - SnapKit
+    - SwipeCellKit
+
+SPEC CHECKSUMS:
+  KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
+  SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
+
+PODFILE CHECKSUM: c03ac71021cbaedf14cf4700232a7ff22f52e3f8
+
+COCOAPODS: 1.15.2
