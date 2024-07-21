@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0EC21FB276B5FFC4FB771939 /* Pods_NoteApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9C5EC8173C90F4B24439B6 /* Pods_NoteApp.framework */; };
 		187093E12C33DA010048136D /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187093E02C33DA010048136D /* ColorManager.swift */; };
+		1877A4BE2C4BA72C005733D7 /* NoteListDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1877A4BC2C4BA72C005733D7 /* NoteListDataModel.xcdatamodeld */; };
 		18A32EB72C33C15B002DE47A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A32EB62C33C15B002DE47A /* AppDelegate.swift */; };
 		18A32EB92C33C15B002DE47A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A32EB82C33C15B002DE47A /* SceneDelegate.swift */; };
 		18A32EC02C33C15C002DE47A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18A32EBF2C33C15C002DE47A /* Assets.xcassets */; };
@@ -17,7 +18,6 @@
 		18A32ECF2C33C217002DE47A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A32ECE2C33C217002DE47A /* Helper.swift */; };
 		18A32ED22C33C243002DE47A /* FolderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A32ED12C33C243002DE47A /* FolderCollectionViewCell.swift */; };
 		18A32ED42C33C24F002DE47A /* NoteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A32ED32C33C24F002DE47A /* NoteCollectionViewCell.swift */; };
-		18A32ED92C33C278002DE47A /* NoteListDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 18A32ED72C33C278002DE47A /* NoteListDataModel.xcdatamodeld */; };
 		18A32EDC2C33C2E6002DE47A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A32EDB2C33C2E6002DE47A /* LoginViewController.swift */; };
 		18A32EDE2C33C2F7002DE47A /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A32EDD2C33C2F7002DE47A /* SettingViewController.swift */; };
 		18A32EE02C33C309002DE47A /* FolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A32EDF2C33C309002DE47A /* FolderViewController.swift */; };
@@ -29,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		187093E02C33DA010048136D /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
+		1877A4BD2C4BA72C005733D7 /* NoteListDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NoteListDataModel.xcdatamodel; sourceTree = "<group>"; };
 		18A32EB32C33C15B002DE47A /* NoteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NoteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18A32EB62C33C15B002DE47A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18A32EB82C33C15B002DE47A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,7 +40,6 @@
 		18A32ECE2C33C217002DE47A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		18A32ED12C33C243002DE47A /* FolderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCollectionViewCell.swift; sourceTree = "<group>"; };
 		18A32ED32C33C24F002DE47A /* NoteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCollectionViewCell.swift; sourceTree = "<group>"; };
-		18A32ED82C33C278002DE47A /* NoteListDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NoteListDataModel.xcdatamodel; sourceTree = "<group>"; };
 		18A32EDB2C33C2E6002DE47A /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		18A32EDD2C33C2F7002DE47A /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		18A32EDF2C33C309002DE47A /* FolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewController.swift; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 		18A32ED52C33C254002DE47A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				18A32ED72C33C278002DE47A /* NoteListDataModel.xcdatamodeld */,
+				1877A4BC2C4BA72C005733D7 /* NoteListDataModel.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -275,11 +275,11 @@
 				18A32EB72C33C15B002DE47A /* AppDelegate.swift in Sources */,
 				18A32ECD2C33C207002DE47A /* DataManager.swift in Sources */,
 				18A32EE22C33C31D002DE47A /* NoteViewController.swift in Sources */,
-				18A32ED92C33C278002DE47A /* NoteListDataModel.xcdatamodeld in Sources */,
 				187093E12C33DA010048136D /* ColorManager.swift in Sources */,
 				18A32EDC2C33C2E6002DE47A /* LoginViewController.swift in Sources */,
 				18A32EE42C33C331002DE47A /* FolderDetailViewController.swift in Sources */,
 				18A32EDE2C33C2F7002DE47A /* SettingViewController.swift in Sources */,
+				1877A4BE2C4BA72C005733D7 /* NoteListDataModel.xcdatamodeld in Sources */,
 				18A32EE02C33C309002DE47A /* FolderViewController.swift in Sources */,
 				18A32EB92C33C15B002DE47A /* SceneDelegate.swift in Sources */,
 				18A32EE82C33C355002DE47A /* TabBarController.swift in Sources */,
@@ -503,14 +503,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		18A32ED72C33C278002DE47A /* NoteListDataModel.xcdatamodeld */ = {
+		1877A4BC2C4BA72C005733D7 /* NoteListDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				18A32ED82C33C278002DE47A /* NoteListDataModel.xcdatamodel */,
+				1877A4BD2C4BA72C005733D7 /* NoteListDataModel.xcdatamodel */,
 			);
-			currentVersion = 18A32ED82C33C278002DE47A /* NoteListDataModel.xcdatamodel */;
+			currentVersion = 1877A4BD2C4BA72C005733D7 /* NoteListDataModel.xcdatamodel */;
 			name = NoteListDataModel.xcdatamodeld;
-			path = /Users/apple/Desktop/NoteApp/NoteApp/Models/NoteListDataModel.xcdatamodeld;
+			path = "/Users/apple/Desktop/NoteApp-Swift/NoteApp/Models/NoteListDataModel.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
